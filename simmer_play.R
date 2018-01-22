@@ -1,5 +1,8 @@
-#library(simmer)
-#library(dplyr)
+library(simmer)
+library(dplyr)
+
+#1.regular eval
+#2.signal
 
 env <- simmer("play", verbose = TRUE)
 
@@ -7,6 +10,7 @@ inputs <- list(
         strategy="Ask" #Ask vs None
 )
 
+#assign taste preference and family id
 initialize_customer <- function(traj)
 {
         traj %>%
@@ -14,6 +18,7 @@ initialize_customer <- function(traj)
                 set_attribute("fuid", function() sample(1:3,1,prob=c(0.2,0.5,0.3)))
 }
 
+#main event
 get_choco <- function(traj)
 {        
         traj %>%
@@ -27,6 +32,7 @@ get_choco <- function(traj)
                 release("chocolate")
 }
 
+#mask or disclose preference
 ask <- function(traj,inputs) {
         if(inputs$strategy=="None") {
                 traj %>% set_attribute("aTaste",1) 
@@ -36,6 +42,7 @@ ask <- function(traj,inputs) {
                 
 }
 
+#high-level traj
 customer <-   trajectory("customer") %>%
         initialize_customer()    %>%
         ask(inputs) %>%
@@ -46,6 +53,7 @@ customer <-   trajectory("customer") %>%
         ) %>% 
         rollback(amount=1, times=100) 
 
+#register counters
 counters <- c("chocolate","white","dark")
 create_counters <- function(env, counters)
 {
@@ -57,7 +65,7 @@ create_counters <- function(env, counters)
         env
 }
 
-
+#execution
 env %>%
         create_counters(counters) %>%
         add_generator("customer",customer,at(rep(0, 5)), mon=2) %>%
