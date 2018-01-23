@@ -99,7 +99,7 @@ create_counters <- function(env, counters)
 env %>%
         create_counters(counters) %>%
         add_generator("customer",customer,at(1:10), mon=2) %>%
-        run(50) %>% wrap() 
+        run(50) 
 
 get_mon_arrivals(env, per_resource = T)
 arrange(get_mon_attributes(env),name,key,time)
