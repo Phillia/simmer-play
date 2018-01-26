@@ -21,7 +21,20 @@ initialize_patient <- function(traj, inputs)
                 set_attribute("aAgeInitial", function() inputs$vAge) %>%
                 set_attribute("aAge", function(attrs) attrs[['aAgeInitial']]) %>%
                 set_attribute("aGender", function() inputs$vGender) %>%
-                set_attribute("aGene", function() sample(1:2,1,prob=c(inputs$vGene,1-inputs$vGene)))#1 - targeted, 2 - not
+                set_attribute("aGene", function() sample(1:6,1,prob=inputs$vGene)) %>% 
+                #1-high/pathogenic,2-high/unknown,3-high/nonpath,4-no finding,5-low penetrance,6-moderate penetrance
+                set_attribute("aTest", 2) %>% #1-tested, 2-not
+                branch(function() get_attribute(env,"fuid"),
+                       continue=c(rep(TRUE,6)), 
+                       #1-modify behavior, 2-not
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod1,1-inputs$mod1))),
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod2,1-inputs$mod2))),
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod3,1-inputs$mod3))),
+                       trajectory("") %>% set_attribute("aMod",2),
+                       trajectory("") %>% set_attribute("aMod",2), 
+                       trajectory("") %>% set_attribute("aMod",2) 
+                        
+                )
 }
 
 

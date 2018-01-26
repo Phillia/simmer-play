@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{graphicx}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\title{Build a DES with R Simmer}
+\author{ZZhou}
+
+\maketitle
+
+\section{Introduction}
+Here is the text of your introduction.
+\pagebreak
+
+\section{Start from scratch}
+Here is the background of the case.
+\pagebreak
+
+\subsection{Blueprint}
+\begin{figure}
+\centering
+  %includegraphics[width=3.0in]{myfigure}
+  \caption{Model Diagram}
+  \label{simulationfigure}
+\end{figure}
+
+
+We have a model structure in mind. Now think about inputs, events, interactions btw inputs and events, measures, strategies. 
+
+\begin{enumerate}
+
+\item
+\textsc{inputs} 
+\begin{description} 
+\item[Gene type:] no finding, high (path, unknown,non-path), mod, low;
+\item[Behavioral:] modify behavior or not and whether behavioral change is beneficial or harmful
+\item[Risk:] beneficial or harmful change
+\end{description}
+
+\item
+\textsc{Events} (with cost and QALY implication)  
+\begin{description} 
+\item[Test]
+\item[Adverse events]
+\end{description}
+
+\item
+\textsc{Interactions}
+\begin{description} 
+\item[Chance of behavioral change] differ by gene type
+\item[Risks of adverse events] differ by gene type, behavioral change
+\item[Outcomes of adverse events] differ by gene type and behavioral change
+\end{description}
+
+\end{enumerate}
+\pagebreak
+
+
+\subsection{Code}
+Start coding. Some handy functions and tricks. \\
+\begin{enumerate}
+
+\item
+\textsc{set attributes} \\\\
+Each simulation subject can be assigned a set of preset attribute values that carry and can be modified throughout the simulation.\\\\
+For example, we can set gene type as an attribute named ``gene'' in the ``initialize\textunderscore patient'' function and draw values 1--6 based on a distribution with probabilites from the inputs list. \\\\
+One important status attribute in this model is whether a person is tested or not, so we can create an attribute called ``aTest''. Please note that all attributes need to be defined before they can be called in the middle. 
+
+\item
+\textsc{create branches} \\\\
+As noted in the diagram, there could be a few opportunities when simulation subjects go to different branches based on their attributes. To achieve that, we can use the ``branch'' function in a trajectory. For example, individuals with high penetrance gene finding will have different chances of modifying behavior depending on specific gene type. To reflect this in our model, we can split the trajectory into six branches and set whether to modify behavior accordingly.
+
+
+\end{enumerate}
+
+
+\end{document}

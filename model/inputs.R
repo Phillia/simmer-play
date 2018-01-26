@@ -7,7 +7,7 @@ inputs <- list(
         
         vAge = 40,
         vGender = 1,
-        vGene = 0.2,
+        vGene = c(0.1,0.2,0.3,0.2,0.1,0.1),
         
         disutilities = list(
                 secular_death = 1
