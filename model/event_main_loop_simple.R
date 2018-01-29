@@ -75,7 +75,7 @@ next_event <- function(attrs)
   for(i in 1:length(event_registry))
   {
     e <- event_registry[[i]]
-    tmp_time   <- attrs[[e$attr]]
+    tmp_time   <- get_attribute(env,e$attr)
     if(tmp_time < event_time)
     {
       event      <- e
@@ -106,7 +106,7 @@ process_events <- function(traj, env, inputs)
   })
   
   # Age them by clock
-  traj <- set_attribute(traj,'aAge',function(attrs) attrs[['aAgeInitial']]+(now(env)/365.0))
+  traj <- set_attribute(traj,'aAge',function() get_attribute(env,'aAgeInitial')+(now(env)/365.0))
   
   # Create a handler for every possible event, using their
   # list position as the branch number
@@ -151,7 +151,7 @@ simulation <- function(env, inputs)
   trajectory("Patient")     %>%
     initialize_patient(inputs)     %>%
     assign_events(inputs)          %>%
-    preemptive_strategy(inputs)    %>%
+    # preemptive_strategy(inputs)    %>%
     branch( # Used branch, to prevent rollback from looking inside event loop function
       function() 1,
       continue=TRUE,

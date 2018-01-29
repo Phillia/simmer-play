@@ -19,20 +19,35 @@ initialize_patient <- function(traj, inputs)
         traj %>%
                 seize("time_in_model") %>%
                 set_attribute("aAgeInitial", function() inputs$vAge) %>%
-                set_attribute("aAge", function(attrs) attrs[['aAgeInitial']]) %>%
+                set_attribute("aAge", function() get_attribute(env,'aAgeInitial')) %>%
                 set_attribute("aGender", function() inputs$vGender) %>%
                 set_attribute("aGene", function() sample(1:6,1,prob=inputs$vGene)) %>% 
                 #1-high/pathogenic,2-high/unknown,3-high/nonpath,4-no finding,5-low penetrance,6-moderate penetrance
                 set_attribute("aTest", 2) %>% #1-tested, 2-not
-                branch(function() get_attribute(env,"fuid"),
+                branch(function() get_attribute(env,"aGene"),
                        continue=c(rep(TRUE,6)), 
-                       #1-modify behavior, 2-not
-                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod1,1-inputs$mod1))),
-                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod2,1-inputs$mod2))),
-                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod3,1-inputs$mod3))),
-                       trajectory("") %>% set_attribute("aMod",2),
-                       trajectory("") %>% set_attribute("aMod",2), 
-                       trajectory("") %>% set_attribute("aMod",2) 
+                       #1-not, 2-modify behavior:bene, 3-modify behavior:harm
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod1,1-inputs$mod1))) %>%
+                               branch(function() get_attribute(env,"aMod"),continue=c(TRUE,TRUE),
+                                      trajectory("modify") %>% 
+                                              set_attribute("aMod",function() sample(2:3,1,prob=c(inputs$behav1,1-inputs$behav1))),
+                                      trajectory("not") %>% timeout(0)
+                               ),
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod2,1-inputs$mod2))) %>%
+                               branch(function() get_attribute(env,"aMod"),continue=c(TRUE,TRUE),
+                                      trajectory("modify") %>% 
+                                              set_attribute("aMod",function() sample(2:3,1,prob=c(inputs$behav2,1-inputs$behav2))),
+                                      trajectory("not") %>% timeout(0)
+                               ),
+                       trajectory("") %>% set_attribute("aMod",function() sample(1:2,1,prob=c(inputs$mod3,1-inputs$mod3))) %>%
+                               branch(function() get_attribute(env,"aMod"),continue=c(TRUE,TRUE),
+                                      trajectory("modify") %>% 
+                                              set_attribute("aMod",function() sample(2:3,1,prob=c(inputs$behav3,1-inputs$behav3))),
+                                      trajectory("not") %>% timeout(0)
+                               ),
+                       trajectory("") %>% set_attribute("aMod",1),
+                       trajectory("") %>% set_attribute("aMod",1), 
+                       trajectory("") %>% set_attribute("aMod",1) 
                         
                 )
 }
@@ -56,7 +71,7 @@ cleanup_on_termination <- function(traj)
                 release("time_in_model")
 }
 
-terminate_simulation <- function(traj, inputs)
+terminate_simulation <- function(traj)
 {
         traj %>%
                 branch(
@@ -66,6 +81,39 @@ terminate_simulation <- function(traj, inputs)
                 )
 }
 
+####
+## Test
+test_event <- function(traj,inputs) {
+        traj %>% set_attribute("aTest",1) %>% mark("test")
+}
+
+
+####
+## Adverse events
+time_to_AE = function(inputs) 
+{
+        #baseline risk
+        gene=get_attribute(env,"aGene")
+        rates=inputs[paste0("mod",gene)]
+        
+        #relative risk
+        behav=get_attribute(env,"aMod")
+        if(behav==2) {rr=0.8}
+        else if(behav==3) {rr=1.3}
+        else {rr=1}
+        
+        #time frame
+        days  = 365
+        
+        #convert rate
+        rates2 = (- (log ( 1 - rates)*rr) / days)
+        t2e = rpexp(1, rate=c(rates2,epsilon), t=c(0,4*365))
+        return(t2e)
+}
+
+AE_event <- function(traj) {
+        traj %>% mark("AE") 
+}
 
 
 ###
@@ -76,12 +124,24 @@ event_registry <- list(
              time_to_event = days_till_death,
              func          = secular_death,
              reactive      = FALSE)
+        # list(name          = "Test",
+        #      attr          = "aTestTime",
+        #      time_to_event = 1,
+        #      func          = test_event,
+        #      reactive      = FALSE)
+        # list(name          = "Adverse Event",
+        #      attr          = "aAETime",
+        #      time_to_event = time_to_AE,
+        #      func          = AE_event,
+        #      reactive      = FALSE)
 )
 
 #### Counters
 counters <- c(
         "time_in_model", 
-        "secular_death"
+        "secular_death",
+        "test",
+        "AE"
 )
 
 source('./event_main_loop_simple.R')

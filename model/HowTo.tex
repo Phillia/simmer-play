@@ -41,7 +41,7 @@ We have a model structure in mind. Now think about inputs, events, interactions 
 \item
 \textsc{Events} (with cost and QALY implication)  
 \begin{description} 
-\item[Test]
+\item[Test: event? attribute?]
 \item[Adverse events]
 \end{description}
 
@@ -65,14 +65,31 @@ Start coding. Some handy functions and tricks. \\
 \textsc{set attributes} \\\\
 Each simulation subject can be assigned a set of preset attribute values that carry and can be modified throughout the simulation.\\\\
 For example, we can set gene type as an attribute named ``gene'' in the ``initialize\textunderscore patient'' function and draw values 1--6 based on a distribution with probabilites from the inputs list. \\\\
-One important status attribute in this model is whether a person is tested or not, so we can create an attribute called ``aTest''. Please note that all attributes need to be defined before they can be called in the middle. 
+One important status attribute in this model is whether a person is tested or not, so we can create an attribute called ``aTest''.
 
 \item
 \textsc{create branches} \\\\
 As noted in the diagram, there could be a few opportunities when simulation subjects go to different branches based on their attributes. To achieve that, we can use the ``branch'' function in a trajectory. For example, individuals with high penetrance gene finding will have different chances of modifying behavior depending on specific gene type. To reflect this in our model, we can split the trajectory into six branches and set whether to modify behavior accordingly.
 
 
+\item
+\textsc{register events} \\\\
+DES processes events based on a time order. We can simulate time to a composite adverse event with a risk depending on gene type and behavioral change. An event can be depicted with two functions: one time function (``time\textunderscore to\textunderscore AE'') and one event function (``AE\textunderscore event''); the time function returns time to an event based on risk parameters from the list of inputs; the event function builds the trajectory to command what to do next. When an adverse event occurs, the event function records a counter called ``AE'' using the ``mark'' function (a wrapper of seize and release without timeout in between), which will reflect in simulation results and help count frequency of adverse events. Please note that ``counter'' and both event functions need to register in the ``counters'' and ``event\textunderscore registry'' list respectively.    
+
+\item
+\textsc{complete inputs} \\\\
+Only risk parameters are called in the simulation. Costs and disutilities are used post-simulation to compute costs and QALYs.
+
+
 \end{enumerate}
+\pagebreak
+
+\subsection{Test}
+Some tips: build gradually, piece by piece
+Set attributes at the beginning before access their values in trajectories.
+Make sure all events and counters are registered correctly.
+Sanity check t2e.
+
 
 
 \end{document}

@@ -1,11 +1,11 @@
-setwd("~/Desktop/simmer-play/simple/model")
+setwd("~/Desktop/simmer-play/model")
 rm(list=ls())
 source("./main_file.R")
-source("./costs_simple.R")
+# source("./costs_simple.R")
 
 ## Look at summary statistics
 #can modify here
-inputs$vHorizon <- 10
+inputs$vHorizon <- 100
 inputs$vN <- 100
 inputs$vAge <- 40
 
@@ -17,5 +17,5 @@ summary <- DT[, .N, by = resource]
 summary 
 
 
-cost_qaly <- cost.qaly(results,inputs) 
-cost_qaly1 <- cost.qaly.i(results,inputs)
+# cost_qaly <- cost.qaly(results,inputs) 
+# cost_qaly1 <- cost.qaly.i(results,inputs)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  26 JAN 2018 15:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  29 JAN 2018 12:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -141,23 +141,38 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 62--63
+[2]
+Overfull \hbox (0.59406pt too wide) in paragraph at lines 53--54
+[]\OT1/cmr/m/n/10 differ by gene type and be-hav-ioral change 
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 66--70
+Underfull \hbox (badness 10000) in paragraph at lines 65--69
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 66--70
+Underfull \hbox (badness 10000) in paragraph at lines 65--69
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 66--70
+Underfull \hbox (badness 10000) in paragraph at lines 65--69
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--73
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--78
 
  []
 
@@ -165,11 +180,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--70
 Here is how much of TeX's memory you used:
  1489 strings out of 493014
  21462 string characters out of 6133351
- 79465 words of memory out of 5000000
+ 81465 words of memory out of 5000000
  5041 multiletter control sequences out of 15000+600000
  8196 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,6n,23p,244b,187s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,6n,23p,911b,187s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmbx10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfont
@@ -177,7 +192,7 @@ s/cm/cmcsc10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmr12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmr17.pfb>
-Output written on HowTo.pdf (4 pages, 79024 bytes).
+Output written on HowTo.pdf (4 pages, 81509 bytes).
 PDF statistics:
  41 PDF objects out of 1000 (max. 8388607)
  28 compressed objects within 1 object stream

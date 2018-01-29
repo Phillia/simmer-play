@@ -7,8 +7,8 @@ source('./age-gompertz.R')
 # NOTE: The variable in must be named attrs
 days_till_death <- function(attrs, inputs)
 {
-  age       <- attrs[['aAge']]
-  death_age <- ageAtDeath(age, attrs[['aGender']])
+  age       <- get_attribute(env,'aAge')
+  death_age <- ageAtDeath(age, get_attribute(env,'aGender'))
   
   return(365*(death_age-age))
 }
